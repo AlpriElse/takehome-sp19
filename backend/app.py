@@ -64,15 +64,7 @@ def get_all_shows():
 def add_show():
     if "name" not in request.json or "episodes_seen" not in request.json:
         return create_response(status=422, message="Did not provide required information to add show")
-
-    name = request.json["name"]
-    episodes_seen = request.json["episodes_seen"]
-
-    payload = db.create('shows', {
-        "name": name,
-        "episodes_seen": episodes_seen
-    })
-
+    payload = db.create('shows', request.json)
     return create_response(status=201, data=payload)
 
 @app.route("/shows/<id>", methods=['GET'])
