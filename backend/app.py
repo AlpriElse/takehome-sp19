@@ -60,6 +60,21 @@ def get_all_shows():
     data = [show for show in db.get('shows') if show['episodes_seen'] >= minEpisodes]
     return create_response({"shows": data})
 
+@app.route("/shows", methods=['POST'])
+def add_show():
+    if "name" not in request.json or "episodes_seen" not in request.json:
+        return create_response(status=422, message="Did not provide required information to add show")
+
+    name = request.json["name"]
+    episodes_seen = request.json["episodes_seen"]
+
+    payload = db.create('shows', {
+        "name": name,
+        "episodes_seen": episodes_seen
+    })
+
+    return create_response(status=201, data=payload)
+
 @app.route("/shows/<id>", methods=['GET'])
 def get_show_with_id(id):
     data = db.getById('shows', int(id))
