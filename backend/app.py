@@ -83,6 +83,13 @@ def get_show_with_id(id):
     return create_response(data)
 
 
+@app.route("/shows/<id>", methods=['PUT'])
+def put_show_with_id(id):
+    if db.getById('shows', int(id)) is None:
+        return create_response(status=404, message="No show with this id exists")
+    item = db.updateById('shows', int(id), request.json)
+    return create_response(status=201, data=item)
+
 @app.route("/shows/<id>", methods=['DELETE'])
 def delete_show(id):
     if db.getById('shows', int(id)) is None:
